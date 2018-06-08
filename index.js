@@ -32,8 +32,17 @@ function checkCollision(rock) {
 
     if (rockLeftEdge <= dodgerLeftEdge && rockRightEdge >= dodgerLeftEdge) {
       return true
-  }  
-}}
+  }  else if (rockLeftEdge >= dodgerLeftEdge && rockRightEdge <= dodgerRightEdge) {
+      return true;
+    } else if (rockLeftEdge <= dodgerRightEdge && rockRightEdge >= dodgerRightEdge) {
+      return true;
+    } else {
+      return false;
+}
+    
+  }
+  
+}
 
 function createRock(x) {
   const rock = document.createElement('div')
@@ -44,8 +53,8 @@ function createRock(x) {
   // Hmmm, why would we have used `var` here?
   var top = 0
 
-  rock.style.top = top
-GAME.appendChild(rock)
+  rock.style.top = `${top}px`
+GAME.append(rock)
   /**
    * Now that we have a rock, we'll need to append
    * it to GAME and move it downwards.
@@ -59,47 +68,39 @@ GAME.appendChild(rock)
   function moveRock() {
    if( checkCollision(rock) ) { endGame()
   }
-   if (rock.style.top < 360) {
-     rock.style.top = `${top += 2}px`
-   } else {
-     GAME.removeChild(rock)
+   else if (top<GAME_HEIGHT) {
+     top +=2
+     rock.style.top = `${top}px`
+     window.requestAnimationFrame(moveRock)
+   } else {rock.remove()
    }
- window.requestAnimationFrame(moveRock)
+    location.reload()
+  }
+  window.requestAnimationFrame(moveRock)
   ROCKS.push(rock)
-
-  // Finally, return the rock element you've created
+  
   return rock
 }
-
-/**
- * End the game by clearing `gameInterval`,
- * removing all ROCKS from the DOM,
- * and removing the `moveDodger` event listener.
- * Finally, alert "YOU LOSE!" to the player.
- */
+     
 function endGame() {
   clearInterval(gameInterval)
-  var i
-  for (i=0; i<ROCKS.length; i++) {
+  for (var i = 0; i < ROCKS.length; i++) {
     ROCKS[i].remove();
   }
   window.removeEventListener('keydown', moveDodger)
-  alert("You LOSE!")
+  alert("YOU LOSE!")
 }
 
 function moveDodger(e) {
  if(e.which === LEFT_ARROW) {
      moveDodgerLeft()
-   }
- }
- if( e.which === 39) {
+     e.preventDefault()
+     e.stopPropagation()
+   } else if( e.which === RIGHT_ARROW) {
    moveDodgerRight()
+   e.preventDefault()
+   e.stopPropagation()
  }
- else {
-   return
- }
- e.preventDefault()
- e.stopPropagation()
 }
 
 function moveDodgerLeft() {
