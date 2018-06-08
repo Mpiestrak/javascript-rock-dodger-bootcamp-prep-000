@@ -91,18 +91,18 @@ function endGame() {
 }
 
 function moveDodger(e) {
- if(e.which === 37) {
-   e.preventDefault()
-   e.stopPropagation()
-   if(dodgerLeftEdge >= 4) {
+ if(e.which === LEFT_ARROW) {
      moveDodgerLeft()
    }
  }
  if( e.which === 39) {
-   e.preventDefault()
-   e.stopPropagation()
-   if(dodgerLeftEdge <= 365)
+   moveDodgerRight()
  }
+ else {
+   return
+ }
+ e.preventDefault()
+ e.stopPropagation()
 }
 
 function moveDodgerLeft() {
